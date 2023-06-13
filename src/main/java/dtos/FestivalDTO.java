@@ -4,7 +4,7 @@ import entities.Festival;
 
 public class FestivalDTO {
 
-    private String id;
+    private Long id;
     private String name;
     private String city;
     private String startDate;
@@ -20,7 +20,7 @@ public class FestivalDTO {
         this.duration = f.getDuration();
     }
 
-    public FestivalDTO(String id, String name, String city, String startDate, String duration) {
+    public FestivalDTO(Long id, String name, String city, String startDate, String duration) {
         this.id = id;
         this.name = name;
         this.city = city;
@@ -28,11 +28,11 @@ public class FestivalDTO {
         this.duration = duration;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
