@@ -52,7 +52,7 @@ public class User implements Serializable {
 
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "user_show",
-          joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+          joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_name"),
           inverseJoinColumns = @JoinColumn(name = "show_id", referencedColumnName = "id"))
   private List<Show> shows = new ArrayList<>();
 
