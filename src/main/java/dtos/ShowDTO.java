@@ -23,8 +23,7 @@ public class ShowDTO {
         this.startTime = s.getStartTime();
     }
 
-    public ShowDTO(Long id, String name, String duration, String location, String startDate, String startTime) {
-        this.id = id;
+    public ShowDTO(String name, String duration, String location, String startDate, String startTime) {
         this.name = name;
         this.duration = duration;
         this.location = location;

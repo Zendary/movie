@@ -17,8 +17,9 @@ private static EntityManagerFactory emf;
     private ShowFacade() {
     }
 
-    public static ShowFacade getShowFacade() {
+    public static ShowFacade getShowFacade(EntityManagerFactory _emf) {
         if (instance == null) {
+            emf = _emf;
             instance = new ShowFacade();
         }
         return instance;
@@ -75,12 +76,14 @@ private static EntityManagerFactory emf;
         }
     }
 
-    public static void main(String[] args) {
-        emf = EMF_Creator.createEntityManagerFactory();
-        ShowFacade facade = getShowFacade();
-//        facade.createShow(new ShowDTO(null,"Cirkus" , "Test", "Test", "Test", "Test"));
+//    public static void main(String[] args) {
+//        emf = EMF_Creator.createEntityManagerFactory();
+//        ShowFacade facade = getShowFacade(emf);
+//        facade.createShow(new ShowDTO("Thor" , "2 timer", "Sal 3", "13 Juni", "12:00"));
+//        facade.createShow(new ShowDTO("Ironman" , "2 timer", "Sal 2", "14 Juni", "13:00"));
+//        facade.createShow(new ShowDTO("Captain America" , "2 timer", "Sal 1", "13 Juni", "14:00"));
 //        facade.getAllShows().forEach(dto -> System.out.println(dto));
-//        facade.deleteShow(1L);
-    }
+//      //  facade.deleteShow(1L);
+//    }
 
 }
