@@ -1,47 +1,87 @@
 package dtos;
 
 import entities.User;
-import entities.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class UserDTO {
-    private String username;
 
-    private List<GroceryListDTO> groceryLists;
+    private String id;
+    private String userName;
+    private String phone;
+    private String email;
+    private String status;
+    private String password;
+    private List<String> roles;
+
+    public UserDTO() {
+    }
 
     public UserDTO(User u) {
-        this.username = u.getUserName();
-        if(u.getGroceryLists() != null)
-            this.groceryLists = u.getGroceryLists().stream().map(g -> new GroceryListDTO(g)).collect(Collectors.toList());
+        this.userName = u.getUserName();
+        this.phone = u.getPhone();
+        this.email = u.getEmail();
+        this.status = u.getStatus();
     }
 
-    public static List<UserDTO> getDtos(List<User> Users) {
-        return Users.stream().map(p -> new UserDTO(p)).collect(Collectors.toList());
+    public static List<UserDTO> getDtos(List<User> users){
+        return users.stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
     }
 
-    public String getUsername() {
-        return username;
+    public String getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public List<GroceryListDTO> getGroceryLists() {
-        return groceryLists;
+    public String getUserName() {
+        return userName;
     }
 
-    public void setGroceryLists(List<GroceryListDTO> groceryLists) {
-        this.groceryLists = groceryLists;
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
-    @Override
-    public String toString() {
-        return "UserDTO{" +
-                "username='" + username + '\'' +
-                ", groceryLists=" + groceryLists +
-                '}';
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public List<String> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;
     }
 }

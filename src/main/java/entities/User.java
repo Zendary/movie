@@ -1,44 +1,68 @@
 package entities;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import org.mindrot.jbcrypt.BCrypt;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import org.mindrot.jbcrypt.BCrypt;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
-
 @NamedQueries({
         @NamedQuery(name = "User.deleteAllRows", query = "DELETE from User"),
-        @NamedQuery(name = "User.getAllGroceryListsByUsername", query = "SELECT g FROM GroceryList g WHERE g.user.userName = :username"),
+        @NamedQuery(name = "User.getAllUsers", query = "SELECT u FROM User u"),
         @NamedQuery(name = "User.getUserByUsername", query = "select u from User u WHERE u.userName = :username")
 })
-
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
+
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Basic(optional = false)
+  @Column(name = "id")
+  private Long id;
+
   @Basic(optional = false)
   @NotNull
-  @Column(name = "user_name", length = 25)
+  @Size(min = 1, max = 255)
+  @Column(name = "user_name")
   private String userName;
-  @Basic(optional = false)
+
+  @Size(max = 20)
+  @Column(name = "phone")
+  private String phone;
+
+  @Size(max = 255)
+  @Column(name = "email")
+  private String email;
+
+  @Column(name = "status")
+  private String status;
+
   @NotNull
   @Size(min = 1, max = 255)
   @Column(name = "user_pass")
   private String userPass;
 
   @JoinTable(name = "user_roles", joinColumns = {
-    @JoinColumn(name = "user_name", referencedColumnName = "user_name")}, inverseJoinColumns = {
-    @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
+          @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
+          @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
   @ManyToMany
   private List<Role> roleList = new ArrayList<>();
 
-  @OneToMany(mappedBy = "user", orphanRemoval = true)
-  private List<GroceryList> groceryLists = new ArrayList<>();
+  @ManyToMany(cascade = CascadeType.ALL)
+  @JoinTable(name = "user_show",
+          joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"),
+          inverseJoinColumns = @JoinColumn(name = "show_id", referencedColumnName = "id"))
+  private List<Show> shows = new ArrayList<>();
+
+  @ManyToOne
+  @JoinColumn(name = "festival_id")
+  private Festival festival;
 
   public List<String> getRolesAsStrings() {
     if (roleList.isEmpty()) {
@@ -46,21 +70,39 @@ public class User implements Serializable {
     }
     List<String> rolesAsStrings = new ArrayList<>();
     roleList.forEach((role) -> {
-        rolesAsStrings.add(role.getRoleName());
-      });
+      rolesAsStrings.add(role.getRoleName());
+    });
     return rolesAsStrings;
   }
 
-  public User() {}
-
-  //TODO Change when password is hashed
-   public boolean verifyPassword(String pw){
-    return BCrypt.checkpw(pw, userPass);
-    }
+  public User() {
+  }
 
   public User(String userName, String userPass) {
     this.userName = userName;
     this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
+  }
+
+  public User(String userName, String phone, String email, String status, String userPass) {
+    this.userName = userName;
+    this.phone = phone;
+    this.email = email;
+    this.status = status;
+    this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
+  }
+
+  public boolean verifyPassword(String pw) {
+    return BCrypt.checkpw(pw, userPass);
+  }
+
+  // Getters and Setters
+
+  public Long getId() {
+    return id;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
   }
 
   public String getUserName() {
@@ -71,12 +113,36 @@ public class User implements Serializable {
     this.userName = userName;
   }
 
+  public String getPhone() {
+    return phone;
+  }
+
+  public void setPhone(String phone) {
+    this.phone = phone;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
+  public String getStatus() {
+    return status;
+  }
+
+  public void setStatus(String status) {
+    this.status = status;
+  }
+
   public String getUserPass() {
-    return this.userPass;
+    return userPass;
   }
 
   public void setUserPass(String userPass) {
-    this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());;
+    this.userPass = BCrypt.hashpw(userPass, BCrypt.gensalt());
   }
 
   public List<Role> getRoleList() {
@@ -91,22 +157,35 @@ public class User implements Serializable {
     roleList.add(userRole);
   }
 
-  public List<GroceryList> getGroceryLists() {
-    return groceryLists;
+  public List<Show> getShows() {
+    return shows;
   }
 
-  public void addGroceryList(GroceryList groceryList) {
-    this.groceryLists.add(groceryList);
-    groceryList.setUser(this);
+  public void setShows(List<Show> shows) {
+    this.shows = shows;
   }
 
+  public Festival getFestival() {
+    return festival;
+  }
+
+  public void setFestival(Festival festival) {
+    this.festival = festival;
+  }
+
+  // toString method
   @Override
   public String toString() {
     return "User{" +
-            "userName='" + userName + '\'' +
+            "id=" + id +
+            ", userName='" + userName + '\'' +
+            ", phone='" + phone + '\'' +
+            ", email='" + email + '\'' +
+            ", status='" + status + '\'' +
             ", userPass='" + userPass + '\'' +
             ", roleList=" + roleList +
-            ", groceryLists=" + groceryLists +
+            ", shows=" + shows +
+            ", festival=" + festival +
             '}';
   }
 }
