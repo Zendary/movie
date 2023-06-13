@@ -9,6 +9,10 @@ import java.util.Set;
 
 @Entity
 @Table(name = "shows")
+@NamedQueries({
+        @NamedQuery(name = "Show.deleteAllRows", query = "DELETE from Show"),
+        @NamedQuery(name = "Show.getAllFestivals", query = "SELECT s FROM Show s"),
+})
 public class Show {
 
     @Id

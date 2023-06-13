@@ -22,4 +22,25 @@ Content-Type: application/json
     "startTime": "14:00"
   }
 
+###
+
+GET http://localhost:8080/movie/api/festival/all
+
+###
+
+DELETE http://localhost:8080/movie/api/festival/delete/3
+
+###
+
+POST http://localhost:8080/movie/api/festival/create
+Content-Type: application/json
+
+{
+  "name": "Eksamen",
+  "city": "Lyngby",
+  "startDate": "13 Juni",
+  "duration": "24 Timer"
+}
+
+
 

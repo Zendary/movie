@@ -28,6 +28,13 @@ public class FestivalDTO {
         this.duration = duration;
     }
 
+    public FestivalDTO( String name, String city, String startDate, String duration) {
+        this.name = name;
+        this.city = city;
+        this.startDate = startDate;
+        this.duration = duration;
+    }
+
     public Long getId() {
         return id;
     }
