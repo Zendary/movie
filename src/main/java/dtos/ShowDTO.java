@@ -4,7 +4,7 @@ import entities.Show;
 
 public class ShowDTO {
 
-    private String id;
+    private Long id;
     private String name;
     private String duration;
     private String location;
@@ -15,6 +15,7 @@ public class ShowDTO {
     }
 
     public ShowDTO(Show s){
+        this.id = s.getId();
         this.name = s.getName();
         this.duration = s.getDuration();
         this.location = s.getLocation();
@@ -22,7 +23,7 @@ public class ShowDTO {
         this.startTime = s.getStartTime();
     }
 
-    public ShowDTO(String id, String name, String duration, String location, String startDate, String startTime) {
+    public ShowDTO(Long id, String name, String duration, String location, String startDate, String startTime) {
         this.id = id;
         this.name = name;
         this.duration = duration;
@@ -31,11 +32,11 @@ public class ShowDTO {
         this.startTime = startTime;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -77,5 +78,17 @@ public class ShowDTO {
 
     public void setStartTime(String startTime) {
         this.startTime = startTime;
+    }
+
+    @Override
+    public String toString() {
+        return "ShowDTO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", duration='" + duration + '\'' +
+                ", location='" + location + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", startTime='" + startTime + '\'' +
+                '}';
     }
 }

@@ -67,4 +67,15 @@ public class FestivalDTO {
     public void setDuration(String duration) {
         this.duration = duration;
     }
+
+    @Override
+    public String toString() {
+        return "FestivalDTO{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", city='" + city + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", duration='" + duration + '\'' +
+                '}';
+    }
 }
