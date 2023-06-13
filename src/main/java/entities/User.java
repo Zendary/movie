@@ -21,11 +21,6 @@ public class User implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Basic(optional = false)
-  @Column(name = "id")
-  private Long id;
-
   @Basic(optional = false)
   @NotNull
   @Size(min = 1, max = 255)
@@ -48,11 +43,12 @@ public class User implements Serializable {
   @Column(name = "user_pass")
   private String userPass;
 
-  @JoinTable(name = "user_roles", joinColumns = {
-          @JoinColumn(name = "user_id", referencedColumnName = "id")}, inverseJoinColumns = {
-          @JoinColumn(name = "role_name", referencedColumnName = "role_name")})
-  @ManyToMany
+  @ManyToMany(cascade = CascadeType.ALL)
+  @JoinTable(name = "user_roles",
+          joinColumns = @JoinColumn(name = "user_name", referencedColumnName = "user_name"),
+          inverseJoinColumns = @JoinColumn(name = "role_name", referencedColumnName = "role_name"))
   private List<Role> roleList = new ArrayList<>();
+
 
   @ManyToMany(cascade = CascadeType.ALL)
   @JoinTable(name = "user_show",
@@ -95,15 +91,6 @@ public class User implements Serializable {
     return BCrypt.checkpw(pw, userPass);
   }
 
-  // Getters and Setters
-
-  public Long getId() {
-    return id;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
-  }
 
   public String getUserName() {
     return userName;
@@ -155,6 +142,7 @@ public class User implements Serializable {
 
   public void addRole(Role userRole) {
     roleList.add(userRole);
+    userRole.getUserList().add(this);
   }
 
   public List<Show> getShows() {
@@ -177,7 +165,6 @@ public class User implements Serializable {
   @Override
   public String toString() {
     return "User{" +
-            "id=" + id +
             ", userName='" + userName + '\'' +
             ", phone='" + phone + '\'' +
             ", email='" + email + '\'' +

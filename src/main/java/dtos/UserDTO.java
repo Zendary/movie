@@ -1,5 +1,6 @@
 package dtos;
 
+import entities.Role;
 import entities.User;
 
 import java.util.List;
@@ -7,7 +8,6 @@ import java.util.stream.Collectors;
 
 public class UserDTO {
 
-    private String id;
     private String userName;
     private String phone;
     private String email;
@@ -29,13 +29,6 @@ public class UserDTO {
         return users.stream().map(u -> new UserDTO(u)).collect(Collectors.toList());
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUserName() {
         return userName;
@@ -88,7 +81,6 @@ public class UserDTO {
     @Override
     public String toString() {
         return "UserDTO{" +
-                "id='" + id + '\'' +
                 ", userName='" + userName + '\'' +
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
@@ -97,4 +89,5 @@ public class UserDTO {
                 ", roles=" + roles +
                 '}';
     }
+
 }

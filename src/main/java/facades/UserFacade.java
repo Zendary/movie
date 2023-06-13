@@ -9,9 +9,6 @@ import utils.EMF_Creator;
 
 import java.util.List;
 
-/**
- * @author lam@cphbusiness.dk
- */
 public class UserFacade {
 
     private static EntityManagerFactory emf;
@@ -20,11 +17,6 @@ public class UserFacade {
     private UserFacade() {
     }
 
-    /**
-     *
-     * @param _emf
-     * @return the instance of this facade.
-     */
     public static UserFacade getUserFacade(EntityManagerFactory _emf) {
         if (instance == null) {
             emf = _emf;
@@ -37,18 +29,29 @@ public class UserFacade {
         EntityManager em = emf.createEntityManager();
         User user;
         try {
-            user = em.createQuery("SELECT u FROM User u WHERE u.userName = :username", User.class)
+            user = em.createNamedQuery("User.getUserByUsername", User.class)
                     .setParameter("username", username)
                     .getSingleResult();
-
-            if (user == null || !user.verifyPassword(password)) {
+            if (user == null) {
                 throw new AuthenticationException("Invalid user name or password");
             }
+            System.out.println("Stored Hash: " + user.getUserPass());
+            System.out.println("Input Password: " + password);
+            if (!user.verifyPassword(password)) {
+                System.out.println("Password did not match for username: " + username);
+                throw new AuthenticationException("Invalid user name or password");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new AuthenticationException("Server error during authentication");
         } finally {
             em.close();
         }
         return user;
     }
+
+
+
 
     public List<UserDTO> getAllUsers() {
         EntityManager em = emf.createEntityManager();
@@ -58,6 +61,19 @@ public class UserFacade {
         } finally {
             em.close();
         }
+    }
+
+    public UserDTO create(UserDTO userDTO) {
+        EntityManager em = emf.createEntityManager();
+        User user = new User(userDTO.getUserName(), userDTO.getPassword());
+        try {
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+        return new UserDTO(user);
     }
 
     public static void main(String[] args) {
